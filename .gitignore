@@ -1,52 +1,69 @@
-# Prerequisites
-*.d
-
-# Object files
+# C++ objects and libs
+*.slo
+*.lo
 *.o
-*.ko
-*.obj
-*.elf
-
-# Linker output
-*.ilk
-*.map
-*.exp
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
 *.a
 *.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
+*.lai
 *.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
+#.dll
+#.dylib
 *.pdb
+*.suo
+*.sdf
+*.opensdf
+*.pch
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# Qt-es
+*.pro.user
+*.pro.user.*
+moc_*.cpp
+qrc_*.cpp
+Makefile
+.qmake.stash
+*-build-*
+
+*.obj
+*.manifest
+*.res
+*.tlog
+*.log
+*.exe
+*.exp
+
+# Mac
+*.DS_Store
+*.o
+*.o-i386
+*.o-x86_64
+Makefile.Debug
+Makefile.Release
+
+
+# temporary and html doc files
+intermediate/
+_intermediate/
+_doc/
+_bin/
+.settings/
+ImagePlay.VC.db
+
+
+
+build-*-Desktop_Qt_*/
+build/
+_build/
+*.pro.user*
+*.autosave
+
+
+x64/
+GeneratedFiles/
+*.sdf
+*.opensdf
+.vs/
+*.vcxproj.user*
+_lib/
+_lib
+*.sublime-workspace
+CMakeLists.txt.user
