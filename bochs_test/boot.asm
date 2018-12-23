@@ -34,7 +34,7 @@ BaseOfStack	    equ	                    BASE_OF_STACK
 ;----------以下为正式代码--------------
 
 
-macro_begin_bios
+                macro_begin_bios
 
                 jmp     Label_Start
 
@@ -90,5 +90,5 @@ Label_Start:
 
 
 ;-------填充剩余空间------
-macro_end_bios
+                macro_end_bios
 
