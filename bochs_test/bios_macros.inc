@@ -37,18 +37,18 @@
 ;        将游标的行数和列数读取到dh,dl中
 ;
 ;   参数描述：无
+;   返回值:
+;       dh=行号，dl=列号   CH＝光标的起始行 CL＝光标的终止行     
 ;
 ;***************************************************/
 %macro      macro_screen_cursor_get_pos 0
                 push    ax
                 push    bx
-                push    cx
 
                 mov     ah, 3
                 mov     bh, 0
                 int     10h ;读取目前的光标信息。dh=行号，dl=列号
 
-                pop     cx
                 pop     bx
                 pop     ax
 %endmacro
