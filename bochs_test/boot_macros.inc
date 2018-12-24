@@ -17,4 +17,11 @@ BaseOfStack	    equ	                    BASE_OF_STACK
 	            dw	    0xaa55
 %endmacro
 
+%macro      macro_boot_init_regs 0
+	            mov	    ax,	cs
+	            mov	    ds,	ax
+	            mov	    es,	ax
+	            mov	    ss,	ax
+	            mov	    sp,	BASE_OF_STACK
+%endmacro
 

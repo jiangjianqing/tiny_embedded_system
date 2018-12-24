@@ -6,39 +6,27 @@
 
                 macro_begin_bios
 
-                jmp     Label_Start
+                jmp     short Label_Start
+                nop
 
 StartBootMessage:	
-                db	"Start Boot..."
+                db	"Start Boot"
 StartBootMessageLen equ $-StartBootMessage
 
 Label_Start:
-
-	            mov	    ax,	cs
-	            mov	    ds,	ax
-	            mov	    es,	ax
-	            mov	    ss,	ax
-	            mov	    sp,	BASE_OF_STACK
+                macro_boot_init_regs
 
 ;=======	clear screen
                 macro_screen_clean
 
 ;=======	set focus
-
-	mov	ax,	0200h
-	mov	bx,	0000h
-	mov	dx,	0000h
-	int	10h
+                macro_screen_cursor_pos 2,10
 
 ;=======	display on screen : Start Booting......
-    macro_display   StartBootMessage , StartBootMessageLen
+                ;macro_screen_display   StartBootMessage , StartBootMessageLen
 
 ;=======	reset floppy
-
-	xor	ah,	ah
-	xor	dl,	dl
-	int	13h
-
+                macro_floppy_reset
 
 ;代码停在此处
 	jmp	$

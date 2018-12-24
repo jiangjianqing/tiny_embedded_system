@@ -24,7 +24,7 @@ TARGET = adx$(VERSION)
 build:boot.img boot.bin
 	ls -al
 
-boot.bin:boot.asm
+boot.bin:boot.asm bios_macros.inc boot_macros.inc
 	nasm boot.asm -i $(TOP_PATH)/  -o boot.bin
 
 boot.img:boot.bin
