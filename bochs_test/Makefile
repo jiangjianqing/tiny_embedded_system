@@ -32,3 +32,19 @@ boot.img:boot.bin
 
 start:build
 	bochs -f bochsrc
+
+#all:$(TARGET)
+#       	$(MV) $(TARGET) $(BIN_PATH)
+#	$(LN) $(BIN_PATH)/$(TARGET) $(BIN_PATH)/adx
+
+#$(TARGET) : $(OBJS)
+#    	$(CXX) $^ -o $@ -L$(LIB_PATH) $(LIBS)
+
+#$(OBJS):%.o : %.cpp
+#    	$(CXX) $(CFLAGS) $< -o $@ -I$(INC_PATH)
+
+.PHONY : clean
+clean:
+	$(RM) boot.bin
+    #$(RM) $(TARGET) $(OBJS)
+
