@@ -22,16 +22,16 @@ VERSION = 1.0.0.0
 TARGET = adx$(VERSION)
 
 build:boot.img loader.bin
-	ls -al
+	ls -al $(BIN_PATH)
 
 boot.bin:boot.asm bios_macros.inc boot_macros.inc fat12_macros.inc
-	nasm boot.asm -i $(TOP_PATH)/  -o boot.bin
+	nasm boot.asm -i $(TOP_PATH)/  -o $(BIN_PATH)boot.bin
 
 boot.img:boot.bin
-	dd if=boot.bin of=boot.img bs=512 count=1 conv=notrunc	
+	dd if=$(BIN_PATH)boot.bin of=$(BIN_PATH)boot.img bs=512 count=1 conv=notrunc	
 
 loader.bin:loader.asm bios_macros.inc boot_macros.inc fat12_macros.inc
-	nasm loader.asm -i $(TOP_PATH)/  -o loader.bin
+	nasm loader.asm -i $(TOP_PATH)/  -o $(BIN_PATH)loader.bin
 
 start:build
 	bochs -f bochsrc
@@ -48,6 +48,6 @@ start:build
 
 .PHONY : clean
 clean:
-	$(RM) boot.bin
+	$(RM) ${BIN_PATH}*.bin
     #$(RM) $(TARGET) $(OBJS)
 
