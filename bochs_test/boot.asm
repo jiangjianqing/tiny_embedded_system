@@ -26,16 +26,14 @@ Label_Start:
                 macro_screen_cursor_set_pos 2,10
 
 ;=======	display on screen : Start Booting......
-                macro_screen_print   StartBootMessage , StartBootMessageLen 
-                
-                macro_screen_print   StartBootMessage , StartBootMessageLen ,8,20
+                macro_screen_print   StartBootMessage , StartBootMessageLen ,0,0
 
 ;=======	reset floppy
                 macro_floppy_reset
 
 ;代码停在此处
-	            jmp     $
-
+	            ;jmp     $
+                macro_search_loader
 
 ;-------填充剩余空间------
                 macro_boot_end

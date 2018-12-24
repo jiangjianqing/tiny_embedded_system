@@ -64,9 +64,9 @@
 ;       %4 : 游标列数	
 ;
 ;***************************************************/
-%macro      macro_screen_print 2-4 -1,0
+%macro      macro_screen_print 2-5 -1,0,000fh
 	            mov	    ax,	1301h
-	            mov	    bx,	000fh
+	            mov	    bx,	%5
 %if %0=2
                 macro_screen_cursor_get_pos          
 %else      
