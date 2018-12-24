@@ -21,14 +21,17 @@ LIBS += -lconfig
 VERSION = 1.0.0.0
 TARGET = adx$(VERSION)
 
-build:boot.img boot.bin
+build:boot.img loader.bin
 	ls -al
 
-boot.bin:boot.asm bios_macros.inc boot_macros.inc
+boot.bin:boot.asm bios_macros.inc boot_macros.inc fat12_macros.inc
 	nasm boot.asm -i $(TOP_PATH)/  -o boot.bin
 
 boot.img:boot.bin
 	dd if=boot.bin of=boot.img bs=512 count=1 conv=notrunc	
+
+loader.bin:loader.asm bios_macros.inc boot_macros.inc fat12_macros.inc
+	nasm loader.asm -i $(TOP_PATH)/  -o loader.bin
 
 start:build
 	bochs -f bochsrc

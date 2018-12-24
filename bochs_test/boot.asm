@@ -1,5 +1,6 @@
                 %include "boot_macros.inc"
                 %include "bios_macros.inc"
+                %include "fat12_macros.inc"
 
 ;----------以下为正式代码--------------
 
@@ -8,6 +9,8 @@
 
                 jmp     short Label_Start
                 nop
+;这里开始加入文件系统描述（必须紧跟在nop之后）
+                macro_fat12_defines
 
 StartBootMessage:	
                 db	"Start Boot"
