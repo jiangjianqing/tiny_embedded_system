@@ -4,7 +4,7 @@
 ;----------以下为正式代码--------------
 
 
-                macro_begin_bios
+                macro_boot_begin
 
                 jmp     short Label_Start
                 nop
@@ -23,15 +23,15 @@ Label_Start:
                 macro_screen_cursor_pos 2,10
 
 ;=======	display on screen : Start Booting......
-                ;macro_screen_display   StartBootMessage , StartBootMessageLen
+                macro_screen_display   StartBootMessage , StartBootMessageLen
 
 ;=======	reset floppy
                 macro_floppy_reset
 
 ;代码停在此处
-	jmp	$
+	            jmp     $
 
 
 ;-------填充剩余空间------
-                macro_end_bios
+                macro_boot_end
 
