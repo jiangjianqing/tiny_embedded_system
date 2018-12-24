@@ -39,7 +39,7 @@ BaseOfStack	    equ	                    BASE_OF_STACK
                 jmp     Label_Start
 
 StartBootMessage:	
-                db	"Start Boot"
+                db	"Start Boot..."
 StartBootMessageLen equ $-StartBootMessage
 
 Label_Start:
