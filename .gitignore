@@ -67,3 +67,4 @@ _lib/
 _lib
 *.sublime-workspace
 CMakeLists.txt.user
+bochsout.txt
