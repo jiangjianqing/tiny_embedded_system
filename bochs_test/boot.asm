@@ -19,11 +19,13 @@ Label_Start:
 ;=======	clear screen
                 macro_screen_clean
 
-;=======	set focus
-                macro_screen_cursor_pos 2,10
+;=======	set cursor pos
+                macro_screen_cursor_set_pos 2,10
 
 ;=======	display on screen : Start Booting......
-                macro_screen_display   StartBootMessage , StartBootMessageLen , 0,0
+                macro_screen_print   StartBootMessage , StartBootMessageLen 
+                
+                macro_screen_print   StartBootMessage , StartBootMessageLen ,8,20
 
 ;=======	reset floppy
                 macro_floppy_reset
