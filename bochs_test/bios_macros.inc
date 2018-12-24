@@ -1,40 +1,74 @@
-;=======	clear screen
+;/***************************************************
+;	功能：
+;        清空当前屏幕内容
+;
+;   参数描述：无
+;
+;***************************************************/
 %macro      macro_screen_clean 0
-	            mov	ax,	0600h
-	            mov	bx,	0700h
-	            mov	cx,	0
-	            mov	dx,	0184fh
-	            int	10h
+	            mov	    ax,	0600h
+	            mov	    bx,	0700h
+	            mov	    cx,	0
+	            mov	    dx,	0184fh
+	            int	    10h
 %endmacro
 
-%macro      macro_screen_display 2
-;=======	display on screen 
-
-	            mov	ax,	1301h
-	            mov	bx,	000fh
-	            mov	dx,	0000h
-	            mov	cx,	%2
+;/***************************************************
+;	功能：
+;        在屏幕上指定位置显示字符串
+;
+;   参数描述：
+;       %1 : 字符串地址
+;       %2 : 字符串长度
+;       %3 : 游标行数
+;       %4 : 游标列数	
+;
+;***************************************************/
+%macro      macro_screen_display 2-4 0,0
+	            mov	    ax,	1301h
+	            mov	    bx,	000fh
+                mov     dh, %3  ;行
+                mov     dl, %4  ;列
+	            ;mov	    dx,	0000h
+	            mov	    cx,	%2
 	            push	ax
-	            mov	ax,	ds
-	            mov	es,	ax
-	            pop	ax
-	            mov	bp,	%1
-	            int	10h
+	            mov	    ax,	ds
+	            mov	    es,	ax
+	            pop	    ax
+	            mov	    bp,	%1
+	            int	    10h
 %endmacro
 
+;/***************************************************
+;	功能：
+;        设定游标的行数和列数
+;
+;   参数描述：
+;       %1 : 游标行数
+;       %2 : 游标列数	
+;
+;***************************************************/
 %macro      macro_screen_cursor_pos 2
-	            mov	ax,	0200h
-	            mov	bx,	0000h
-	            mov     dl,%2   ;列
+	            mov	    ax,	0200h
+	            mov	    bx,	0000h
                 mov     dh,%1   ;行
+	            mov     dl,%2   ;列
                 ;mov	dx,	0000h
-	            int	10h
+	            int	    10h
 %endmacro
 
-%macro      macro_floppy_reset 0
-;=======	reset floppy
-
-	            xor	ah,	ah
-	            xor	dl,	dl
-	            int	13h
+;/***************************************************
+;	功能：
+;        设定游标的行数和列书
+;
+;   参数描述：
+;       %1 : 游标行数
+;       %2 : 游标列数	
+;
+;***************************************************/
+%macro      macro_floppy_reset 0-1 0
+	            xor	    ah,	ah
+                mov     dl, %1
+	            ;xor	dl,	dl
+	            int	    13h
 %endmacro
