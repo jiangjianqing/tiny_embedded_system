@@ -44,8 +44,15 @@ Label_Start:
 ;=======	open address A20
                 macro_open_address_a20
 
-;这里开始读取kernel.bin
-;这里开始读取硬件信息
+;当前处于real mode（实模式），比如完成如下工作：
+;a、读取kernel.bin,完成2件工作：1、将其读入到1MB空间内的内存区域；2、转存到1MB以上内存空间
+;b、读取硬件信息，保存在内存指定空间中，便于kernel访问
+
+
+;上述读取硬件信息的工作只有在实模式下使用bios才能进行访问，完成后即可切换到IA-32e模式，并跨段调转到kernel代码起始位置。
+;从real mode（16位）切换到protect mode（32位）
+;c、切换到IA-32e模式（64位）并跳转到kernel代码区
+
 
 ;=======	init IDT GDT goto protect mode 
 
