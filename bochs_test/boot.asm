@@ -26,7 +26,7 @@ Label_Start:
                 macro_screen_cursor_set_pos 2,10
 
 ;=======	display on screen : Start Booting......
-                macro_screen_print   StartBootMessage , StartBootMessageLen ,0,0
+                macro_screen_print   StartBootMessage , StartBootMessageLen ,000fh,0,0
 
 ;=======	reset floppy
                 macro_disk_reset    0
