@@ -4,7 +4,7 @@ org	LoaderOrg
                 jmp     Label_Start
 
 [section gdt]
-LABEL_GDT:      dw      0,0
+LABEL_GDT:      dd      0,0
 LABEL_DESC_CODE32:	
                 dd	    0x0000FFFF,0x00CF9A00
 LABEL_DESC_DATA32:	
