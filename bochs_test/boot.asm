@@ -17,7 +17,7 @@ StartBootMessage:
 StartBootMessageLen equ $-StartBootMessage
 
 Label_Start:
-                macro_boot_init_regs
+                macro_boot_init_sregs
 
 ;=======	clear screen
                 macro_screen_clean
