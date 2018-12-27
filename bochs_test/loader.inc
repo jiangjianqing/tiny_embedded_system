@@ -16,3 +16,31 @@ KernelOrg               equ     BaseOfKernel << 4 + OffsetOfKernel
 BaseTmpOfKernel         equ     0x00
 OffsetTmpOfKernel       equ     0x7E00
 MemoryStructBufferAddr  equ	    0x7E00
+
+
+
+%macro  macro_open_address_a20 0
+;=======	open address A20
+	push	ax
+	in	al,	92h
+	or	al,	00000010b
+	out	92h,	al
+	pop	ax
+
+	cli
+
+	db	0x66
+	lgdt	[GdtPtr]	
+
+	mov	eax,	cr0
+	or	eax,	1
+	mov	cr0,	eax
+
+	mov	ax,	SelectorData32
+	mov	fs,	ax
+	mov	eax,	cr0
+	and	al,	11111110b
+	mov	cr0,	eax
+
+	sti
+%endmacro

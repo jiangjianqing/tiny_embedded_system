@@ -13,6 +13,8 @@ BIN_PATH = $(TOP_PATH)/bin/
 LIB_PATH = $(TOP_PATH)/lib/
 INC_PATH = $(TOP_PATH)/include/
 
+MOUNT_PATH = /media/
+
 SRCS = $(wildcard $(SRC_PATH)*.cpp)
 OBJS = $(patsubst %.cpp, %.o, $(SRCS))
 #LIBS += $(LIB_PATH)libconfig.a
@@ -33,7 +35,12 @@ boot.img:boot.bin
 loader.bin:loader.asm bios_macros.inc boot_macros.inc fat12_macros.inc
 	nasm loader.asm -i $(TOP_PATH)/  -o $(BIN_PATH)loader.bin
 
-start:build
+mount_and_copy: build
+	sudo mount bin/boot.img $(MOUNT_PATH) -t vfat -o loop
+	sudo cp bin/loader.bin $(MOUNT_PATH)
+	sudo umount $(MOUNT_PATH)
+
+start:mount_and_copy
 	bochs -f bochsrc
 
 #all:$(TARGET)
