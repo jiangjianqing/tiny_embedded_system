@@ -44,8 +44,132 @@ Label_Start:
 ;=======	open address A20
                 macro_open_address_a20
 
+;这里开始读取kernel.bin
+;这里开始读取硬件信息
+
+;=======	init IDT GDT goto protect mode 
+
+	cli			;======close interrupt
+
+	db	0x66
+	lgdt	[GdtPtr]
+
+;	db	0x66
+;	lidt	[IDT_POINTER]
+
+	mov	eax,	cr0
+	or	eax,	1
+	mov	cr0,	eax	
+
+	jmp	dword SelectorCode32:GO_TO_TMP_Protect
+
+[SECTION .s32]
+[BITS 32]
+
+GO_TO_TMP_Protect:
+
+;=======	go to tmp long mode
+
+	mov	ax,	0x10
+	mov	ds,	ax
+	mov	es,	ax
+	mov	fs,	ax
+	mov	ss,	ax
+	mov	esp,	7E00h
+
+	call	support_long_mode
+	test	eax,	eax
+
+	jz	no_support
+
+;=======	init temporary page table 0x90000
+
+	mov	dword	[0x90000],	0x91007
+	mov	dword	[0x90800],	0x91007		
+
+	mov	dword	[0x91000],	0x92007
+
+	mov	dword	[0x92000],	0x000083
+
+	mov	dword	[0x92008],	0x200083
+
+	mov	dword	[0x92010],	0x400083
+
+	mov	dword	[0x92018],	0x600083
+
+	mov	dword	[0x92020],	0x800083
+
+	mov	dword	[0x92028],	0xa00083
+
+;=======	load GDTR64
+
+	db	0x66
+	lgdt	[Gdt64Ptr]
+	mov	ax,	0x10
+	mov	ds,	ax
+	mov	es,	ax
+	mov	fs,	ax
+	mov	gs,	ax
+	mov	ss,	ax
+
+	mov	esp,	7E00h
+
+;=======	open PAE
+
+	mov	eax,	cr4
+	bts	eax,	5
+	mov	cr4,	eax
+
+;=======	load	cr3
+
+	mov	eax,	0x90000
+	mov	cr3,	eax
+
+;=======	enable long-mode
+
+	mov	ecx,	0C0000080h		;IA32_EFER
+	rdmsr
+
+	bts	eax,	8
+	wrmsr
+
+;=======	open PE and paging
+
+	mov	eax,	cr0
+	bts	eax,	0
+	bts	eax,	31
+	mov	cr0,	eax
+
+;=======至此cpu进入IA-32e模式，但是处理器目前正在执行保护模式的程序，这种状态叫做兼容模式，即运行在IA-32e模式下的32位程序模式。
+;=======若想真正运行在IA-32e模式下，还需要一条跨段跳转/调用指令将CS段寄存器的值更新为IA-32e模式的代码段，即跳转到kernel.bin所在的内存地址即可
+    ;加载kernel.bin进入内存后才可以使用下面的跨段跳转
+	;jmp	SelectorCode64:OffsetOfKernelFile
+
+
+;=======	no support
+no_support:
 
 	            jmp	$
+
+
+;=======	test support long mode or not
+
+support_long_mode:
+
+	            mov	eax,	0x80000000
+	            cpuid
+	            cmp	eax,	0x80000001
+	            setnb	al	
+	            jb	support_long_mode_done
+	            mov	eax,	0x80000001
+	            cpuid
+	            bt	edx,	29
+	            setc	al
+support_long_mode_done:
+	
+	            movzx	eax,	al
+	            ret
+
 
 ;=======	display messages
 
