@@ -29,7 +29,7 @@ Label_Start:
                 macro_screen_print   StartBootMessage , StartBootMessageLen ,0,0
 
 ;=======	reset floppy
-                macro_floppy_reset
+                macro_disk_reset    0
 
 ;代码停在此处
 	            ;jmp     $
