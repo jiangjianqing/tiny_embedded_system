@@ -42,35 +42,14 @@ Label_Start:
                 macro_screen_print   StartLoaderMessage , StartLoaderMessageLen
 
 ;=======	open address A20
-	push	ax
-	in	al,	92h
-	or	al,	00000010b
-	out	92h,	al
-	pop	ax
-
-	cli
-
-	db	0x66
-	lgdt	[GdtPtr]	
-
-	mov	eax,	cr0
-	or	eax,	1
-	mov	cr0,	eax
-
-	mov	ax,	SelectorData32
-	mov	fs,	ax
-	mov	eax,	cr0
-	and	al,	11111110b
-	mov	cr0,	eax
-
-	sti
+                macro_open_address_a20
 
 
 	            jmp	$
 
 ;=======	display messages
 
-StartLoaderMessage:	db	"Start Loader baby"
+StartLoaderMessage:	db	"Start Loader"
 StartLoaderMessageLen   equ $-StartLoaderMessage
 
 
