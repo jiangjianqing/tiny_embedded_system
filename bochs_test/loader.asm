@@ -114,7 +114,7 @@ GO_TO_TMP_Protect:
 
 	db	0x66
 	lgdt	[Gdt64Ptr]
-	mov	ax,	0x10
+	mov	ax,	0x10        ;0x10是IA-32e模式的段描述符，并不是一个随意的数字
 	mov	ds,	ax
 	mov	es,	ax
 	mov	fs,	ax
