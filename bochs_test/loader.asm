@@ -65,9 +65,10 @@ Label_Start:
 ;	lidt	[IDT_POINTER]
 
 	mov	eax,	cr0
-	or	eax,	1
-	mov	cr0,	eax	
-
+	;or	eax,	1       ;enable PE 的另一种写法
+    bts eax,0           ;enable PE
+    ;bts eax,31          ;enable PG ,如果开启分页机制，那么mov cr0指令和JMP/CALL指令必须位于同一性地址映射的页面内。书P68
+	mov	cr0,	eax	    ;cr0设置结束后，必须紧跟一条远跳转(far JMP)/远调用(far CALL)指令，以切换到保护模式的代码中去执行（典型的保护模式切换方法） 书P68
 	jmp	dword SelectorCode32:GO_TO_TMP_Protect
 
 [SECTION .s32]
@@ -75,7 +76,7 @@ Label_Start:
 
 GO_TO_TMP_Protect:
 
-;=======	go to tmp long mode
+;=======	go to tmp long mode,进入保护模式后，处理器将从0特权级(CPL = 0)开始执行
 
 	mov	ax,	0x10
 	mov	ds,	ax
@@ -143,8 +144,8 @@ GO_TO_TMP_Protect:
 ;=======	open PE and paging
 
 	mov	eax,	cr0
-	bts	eax,	0
-	bts	eax,	31
+	bts	eax,	0       ;enable PE
+	bts	eax,	31      ;enable PG
 	mov	cr0,	eax
 
 ;=======至此cpu进入IA-32e模式，但是处理器目前正在执行保护模式的程序，这种状态叫做兼容模式，即运行在IA-32e模式下的32位程序模式。
