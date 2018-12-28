@@ -127,7 +127,7 @@ GO_TO_TMP_Protect:
 	bts	eax,	5
 	mov	cr4,	eax
 
-;=======	load	cr3
+;=======	load	cr3 ,fill with temporary page table address
 
 	mov	eax,	0x90000
 	mov	cr3,	eax
@@ -149,8 +149,8 @@ GO_TO_TMP_Protect:
 
 ;=======至此cpu进入IA-32e模式，但是处理器目前正在执行保护模式的程序，这种状态叫做兼容模式，即运行在IA-32e模式下的32位程序模式。
 ;=======若想真正运行在IA-32e模式下，还需要一条跨段跳转/调用指令将CS段寄存器的值更新为IA-32e模式的代码段，即跳转到kernel.bin所在的内存地址即可
-    ;加载kernel.bin进入内存后才可以使用下面的跨段跳转
-	;jmp	SelectorCode64:OffsetOfKernelFile
+    ;加载kernel.bin进入内存后才可以使用下面的跨段跳转,跳转之后cpu将正式进入IA-32e模式
+	jmp	SelectorCode64:OffsetOfKernel
 
 
 ;=======	no support
