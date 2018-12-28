@@ -64,6 +64,7 @@ Label_Start:
 ;	db	0x66
 ;	lidt	[IDT_POINTER]
 
+    ;open PE , 处理器要求只能在开启分页机制的保护模式下才可以切换到IA-32e模式
 	mov	eax,	cr0
 	;or	eax,	1       ;enable PE 的另一种写法
     bts eax,0           ;enable PE
@@ -141,7 +142,7 @@ GO_TO_TMP_Protect:
 	bts	eax,	8
 	wrmsr
 
-;=======	open PE and paging
+;=======	open PE and paging 
 
 	mov	eax,	cr0
 	bts	eax,	0       ;enable PE
