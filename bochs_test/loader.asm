@@ -68,7 +68,7 @@ Label_Start:
 	mov	eax,	cr0
 	;or	eax,	1       ;enable PE 的另一种写法
     bts eax,0           ;enable PE
-    ;bts eax,31          ;enable PG ,如果开启分页机制，那么mov cr0指令和JMP/CALL指令必须位于同一性地址映射的页面内。书P68
+    ;bts eax,31          ;enable PG ,如果开启分页机制，那么mov cr0指令和JMP/CALL指令必须位于同一性地址映射的页面内。书P68 ,而开启IA-32e的第一步就是需要复位PG标志位，所以直接不开启，简化步骤。
 	mov	cr0,	eax	    ;cr0设置结束后，必须紧跟一条远跳转(far JMP)/远调用(far CALL)指令，以切换到保护模式的代码中去执行（典型的保护模式切换方法） 书P68
 	jmp	dword SelectorCode32:GO_TO_TMP_Protect
 
