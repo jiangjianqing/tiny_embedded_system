@@ -4,15 +4,15 @@ org	LoaderOrg
                 jmp     Label_Start
 
 [section gdt]
-LABEL_GDT:      dd      0,0
+LABEL_GDT:      dd      0,0                         ;NULL段描述符 , 段选择子index = 0
 LABEL_DESC_CODE32:	
-                dd	    0x0000FFFF,0x00CF9A00
+                dd	    0x0000FFFF,0x00CF9A00   ;段选择子index = 1
 LABEL_DESC_DATA32:	
                 dd	    0x0000FFFF,0x00CF9200
 GdtLen          equ     $-LABEL_GDT
 GdtPtr:         dw      GdtLen - 1
                 dd      LABEL_GDT
-SelectorCode32  equ     LABEL_DESC_CODE32 - LABEL_GDT
+SelectorCode32  equ     8;LABEL_DESC_CODE32 - LABEL_GDT   ;= 1<<3 + 0<<2 + 0  ,含义 : 1=index,TI=0=GDT ,RPL=0
 SelectorData32  equ     LABEL_DESC_DATA32 - LABEL_GDT
 
 [section gdt64]
