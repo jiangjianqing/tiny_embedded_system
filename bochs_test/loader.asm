@@ -10,7 +10,7 @@ LABEL_DESC_CODE32:
 LABEL_DESC_DATA32:	
                 dd	    0x0000FFFF,0x00CF9200
 GdtLen          equ     $-LABEL_GDT
-GdtPtr:         dw      GdtLen - 1
+GdtPtr:         dw      GdtLen - 1                  ;GDTR_Limit
                 dd      LABEL_GDT
 SelectorCode32  equ     8;LABEL_DESC_CODE32 - LABEL_GDT   ;= 1<<3 + 0<<2 + 0  ,含义 : 1=index,TI=0=GDT ,RPL=0
 SelectorData32  equ     LABEL_DESC_DATA32 - LABEL_GDT
@@ -21,7 +21,7 @@ LABEL_DESC_CODE64:	dq	0x0020980000000000
 LABEL_DESC_DATA64:	dq	0x0000920000000000
 
 Gdt64Len        equ     $ - LABEL_GDT64
-Gdt64Ptr        dw      Gdt64Len - 1
+Gdt64Ptr        dw      Gdt64Len - 1                ;GDTR_Limit
                 dd      LABEL_GDT64
 
 SelectorCode64	equ	LABEL_DESC_CODE64 - LABEL_GDT64
