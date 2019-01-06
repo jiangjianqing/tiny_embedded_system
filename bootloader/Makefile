@@ -9,7 +9,8 @@ LN = ln -sf
 
 TOP_PATH = $(shell pwd)
 SRC_PATH = $(TOP_PATH)/src/
-BIN_PATH = $(TOP_PATH)/bin/
+#BIN_PATH = $(TOP_PATH)/bin/
+BIN_PATH = $(TOP_PATH)/../bin/
 LIB_PATH = $(TOP_PATH)/lib/
 INC_PATH = $(TOP_PATH)/include/
 
@@ -36,8 +37,8 @@ loader.bin:loader.asm bios_macros.inc boot_macros.inc fat12_macros.inc
 	nasm loader.asm -i $(TOP_PATH)/  -o $(BIN_PATH)loader.bin
 
 mount_and_copy: build
-	sudo mount bin/boot.img $(MOUNT_PATH) -t vfat -o loop
-	sudo cp bin/loader.bin $(MOUNT_PATH)
+	sudo mount $(BIN_PATH)boot.img $(MOUNT_PATH) -t vfat -o loop
+	sudo cp $(BIN_PATH)loader.bin $(MOUNT_PATH)
 	sudo umount $(MOUNT_PATH)
 
 start:mount_and_copy
