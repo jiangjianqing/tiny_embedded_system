@@ -1,5 +1,8 @@
-BaseOfLoader	        equ	    0x1000
-OffsetOfLoader	        equ	    0x00
+%ifndef LOADER_INC
+%define LOADER_INC
+
+;BaseOfLoader	        equ	    0x1000
+;OffsetOfLoader	        equ	    0x00
 LoaderOrg               equ     BaseOfLoader << 4 + OffsetOfLoader ;=0x10000
 
 
@@ -44,3 +47,5 @@ MemoryStructBufferAddr  equ	    0x7E00
 
 	sti
 %endmacro
+
+%endif

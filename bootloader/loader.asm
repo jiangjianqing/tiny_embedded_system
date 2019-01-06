@@ -1,5 +1,6 @@
                 %include "loader.inc"
                 %include "bios_macros.inc"
+                %include "loader_read_kernel.inc"
 org	LoaderOrg
                 jmp     Label_Start
 
@@ -27,6 +28,7 @@ Gdt64Ptr        dw      Gdt64Len - 1                ;GDTR_Limit
 SelectorCode64	equ	LABEL_DESC_CODE64 - LABEL_GDT64
 SelectorData64	equ	LABEL_DESC_DATA64 - LABEL_GDT64
 
+
 [SECTION .s16]
 [BITS 16]
 Label_Start:
@@ -47,7 +49,12 @@ Label_Start:
 ;当前处于real mode（实模式），比如完成如下工作：
 ;a、读取kernel.bin,完成2件工作：1、将其读入到1MB空间内的内存区域；2、转存到1MB以上内存空间
 ;b、读取硬件信息，保存在内存指定空间中，便于kernel访问
+;=======	reset floppy
 
+	xor	ah,	ah
+	xor	dl,	dl
+	int	13h
+                macro_read_kernel
 
 ;上述读取硬件信息的工作只有在实模式下使用bios才能进行访问，完成后即可切换到IA-32e模式，并跨段调转到kernel代码起始位置。
 ;从real mode（16位）切换到protect mode（32位）
@@ -180,12 +187,106 @@ support_long_mode_done:
 	            ret
 
 
+
+;临时处理
+    ;=======	read one sector from floppy
+
+    Func_ReadOneSector:
+	    
+	    push	bp
+	    mov	bp,	sp
+	    sub	esp,	2
+	    mov	byte	[bp - 2],	cl
+	    push	bx
+	    mov	bl,	[BPB_SecPerTrk]
+	    div	bl
+	    inc	ah
+	    mov	cl,	ah
+	    mov	dh,	al
+	    shr	al,	1
+	    mov	ch,	al
+	    and	dh,	1
+	    pop	bx
+	    mov	dl,	[BS_DrvNum]
+    Label_Go_On_Reading:
+	    mov	ah,	2
+	    mov	al,	byte	[bp - 2]
+	    int	13h
+	    jc	Label_Go_On_Reading
+	    add	esp,	2
+	    pop	bp
+	    ret
+
+    ;=======	get FAT Entry
+
+    Func_GetFATEntry:
+
+	    push	es
+	    push	bx
+	    push	ax
+	    mov	ax,	00
+	    mov	es,	ax
+	    pop	ax
+	    mov	byte	[Odd],	0
+	    mov	bx,	3
+	    mul	bx
+	    mov	bx,	2
+	    div	bx
+	    cmp	dx,	0
+	    jz	Label_Even
+	    mov	byte	[Odd],	1
+
+    Label_Even:
+
+	    xor	dx,	dx
+	    mov	bx,	[BPB_BytesPerSec]
+	    div	bx
+	    push	dx
+	    mov	bx,	8000h
+	    add	ax,	SectorNumOfFAT1Start
+	    mov	cl,	2
+	    call	Func_ReadOneSector
+	    
+	    pop	dx
+	    add	bx,	dx
+	    mov	ax,	[es:bx]
+	    cmp	byte	[Odd],	1
+	    jnz	Label_Even_2
+	    shr	ax,	4
+
+    Label_Even_2:
+	    and	ax,	0fffh
+	    pop	bx
+	    pop	es
+	    ret
+
+;=======	tmp variable
+
+RootDirSizeForLoop	dw	RootDirSectors
+SectorNo		dw	0
+Odd			db	0
+OffsetOfKernelFileCount	dd	OffsetOfKernel
+
+	BPB_SecPerTrk	dw	18
+	BPB_NumHeads	dw	2
+	BPB_hiddSec	dd	0
+	BPB_TotSec32	dd	0
+	BS_DrvNum	db	0
+    BPB_BytesPerSec	dw	512
+
+MemStructNumber		dd	0
+
+SVGAModeCounter		dd	0
+
+DisplayPosition		dd	0
+
 ;=======	display messages
 
 StartLoaderMessage:	db	"Start Loader"
 StartLoaderMessageLen   equ $-StartLoaderMessage
 
-
+NoLoaderMessage:	db	"ERROR:No KERNEL Found"
+KernelFileName:		db	"KERNEL  BIN",0
 
 
 
