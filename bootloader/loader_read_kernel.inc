@@ -91,6 +91,79 @@ Label_FileName_Found:
 	mov	ax,	cx
 
 
+Label_Go_On_Loading_File:
+	push	ax
+	push	bx
+	mov	ah,	0Eh
+	mov	al,	'.'
+	mov	bl,	0Fh
+	int	10h
+	pop	bx
+	pop	ax
+
+	mov	cl,	1
+	call	Func_ReadOneSector
+	pop	ax
+
+;;;;;;;;;;;;;;;;;;;;;;;	
+	push	cx
+	push	eax
+	push	fs
+	push	edi
+	push	ds
+	push	esi
+
+	mov	cx,	200h
+	mov	ax,	BaseOfKernel
+	mov	fs,	ax
+	mov	edi,	dword	[OffsetOfKernelFileCount]
+
+	mov	ax,	BaseTmpOfKernel
+	mov	ds,	ax
+	mov	esi,	OffsetTmpOfKernel
+
+Label_Mov_Kernel:	;------------------
+	
+	mov	al,	byte	[ds:esi]
+	mov	byte	[fs:edi],	al
+
+	inc	esi
+	inc	edi
+
+	loop	Label_Mov_Kernel
+
+	mov	eax,	0x1000
+	mov	ds,	eax
+
+	mov	dword	[OffsetOfKernelFileCount],	edi
+
+	pop	esi
+	pop	ds
+	pop	edi
+	pop	fs
+	pop	eax
+	pop	cx
+;;;;;;;;;;;;;;;;;;;;;;;	
+
+	call	Func_GetFATEntry
+	cmp	ax,	0FFFh
+	jz	Label_File_Loaded
+	push	ax
+	mov	dx,	RootDirSectors
+	add	ax,	dx
+	add	ax,	SectorBalance
+;	add	bx,	[BPB_BytesPerSec]	
+
+	jmp	Label_Go_On_Loading_File
+
+Label_File_Loaded:
+		
+	mov	ax, 0B800h
+	mov	gs, ax
+	mov	ah, 0Fh				; 0000: 黑底    1111: 白字
+	mov	al, 'G'
+	mov	[gs:((80 * 0 + 39) * 2)], ax	; 屏幕第 0 行, 第 39 列。
+
 %endmacro
 
 %endif

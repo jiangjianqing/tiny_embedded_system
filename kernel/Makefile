@@ -42,7 +42,7 @@ mount_and_copy: build
 	sudo cp $(BIN_PATH)kernel.bin $(MOUNT_PATH)
 	sudo umount $(MOUNT_PATH)
 
-start:build
+start:mount_and_copy
 	bochs -f ../bootloader/bochsrc
 
 clean:
