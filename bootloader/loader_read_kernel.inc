@@ -18,9 +18,7 @@ Lable_Search_In_Root_Dir_Begin:
 	mov	bx,	8000h
 	mov	ax,	[SectorNo]
 	mov	cl,	1
-    
 	call	Func_ReadOneSector
-    jmp $
 	mov	si,	KernelFileName
 	mov	di,	8000h
 	cld
@@ -64,14 +62,33 @@ Label_Goto_Next_Sector_In_Root_Dir:
 ;=======	display on screen : ERROR:No KERNEL Found
 
 Label_No_LoaderBin:
-    jmp $
 
-
+	mov	ax,	1301h
+	mov	bx,	008Ch
+	mov	dx,	0300h		;row 3
+	mov	cx,	21
+	push	ax
+	mov	ax,	ds
+	mov	es,	ax
+	pop	ax
+	mov	bp,	NoLoaderMessage
+	int	10h
+	jmp	$
 
 ;=======	found loader.bin name in root director struct
 
 Label_FileName_Found:
-    jmp $
+	mov	ax,	RootDirSectors
+	and	di,	0FFE0h
+	add	di,	01Ah
+	mov	cx,	word	[es:di]
+	push	cx
+	add	cx,	ax
+	add	cx,	SectorBalance
+	mov	eax,	BaseTmpOfKernel;BaseOfKernelFile
+	mov	es,	eax
+	mov	bx,	OffsetTmpOfKernel;OffsetOfKernelFile
+	mov	ax,	cx
 
 
 %endmacro
