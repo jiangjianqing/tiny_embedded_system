@@ -191,6 +191,8 @@ support_long_mode_done:
 
 
 ;临时处理
+
+;！！！非常重要的设置，文件操作必须的实模式下进行
  [SECTION .s116]
 [BITS 16]
 
