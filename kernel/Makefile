@@ -9,7 +9,8 @@ LN = ln -sf
 
 TOP_PATH = $(shell pwd)
 SRC_PATH = $(TOP_PATH)/src/
-BIN_PATH = $(TOP_PATH)/bin/
+#BIN_PATH = $(TOP_PATH)/bin/
+BIN_PATH = $(TOP_PATH)/../bin/
 LIB_PATH = $(TOP_PATH)/lib/
 INC_PATH = $(TOP_PATH)/include/
 
@@ -23,7 +24,7 @@ LIBS += -lconfig
 VERSION = 1.0.0.0
 TARGET = adx$(VERSION)
 
-all: system
+build: system
 	objcopy -I elf64-x86-64 -S -R ".eh_frame" -R ".comment" -O binary $(BIN_PATH)system $(BIN_PATH)kernel.bin
 
 system:	head.o main.o 
@@ -36,6 +37,17 @@ head.o:	head.S
 	gcc -E  head.S > $(BIN_PATH)head.s
 	as --64 -o $(BIN_PATH)head.o $(BIN_PATH)head.s
 
+mount_and_copy: build
+	sudo mount $(BIN_PATH)boot.img $(MOUNT_PATH) -t vfat -o loop
+	sudo cp $(BIN_PATH)kernel.bin $(MOUNT_PATH)
+	sudo umount $(MOUNT_PATH)
+
+start:build
+	bochs -f ../bootloader/bochsrc
+
 clean:
 	rm -rf *.o *.s~ *.s *.S~ *.c~ *.h~ system  Makefile~ Kernel.lds~ kernel.bin 
+	sudo mount $(BIN_PATH)boot.img $(MOUNT_PATH) -t vfat -o loop
+	sudo rm -rf $(MOUNT_PATH)kernel.bin
+	sudo umount $(MOUNT_PATH)
 
