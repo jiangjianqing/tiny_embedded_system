@@ -3,6 +3,7 @@ CC = $(CROSS)gcc
 CXX = $(CROSS)g++  
 DEBUG =   
 CFLAGS = $(DEBUG) -Wall -c  
+OBJCOPY_FLAGS = -I elf64-x86-64 -S -R ".eh_frame" -R ".comment" -O binary 
 MV = mv -f  
 RM = rm -rf  
 LN = ln -sf  
@@ -25,7 +26,7 @@ VERSION = 1.0.0.0
 TARGET = adx$(VERSION)
 
 build: system
-	objcopy -I elf64-x86-64 -S -R ".eh_frame" -R ".comment" -O binary $(BIN_PATH)system $(BIN_PATH)kernel.bin
+	objcopy $(OBJCOPY_FLAGS) $(BIN_PATH)system $(BIN_PATH)kernel.bin
 
 system:	head.o main.o 
 	ld -b elf64-x86-64 -o $(BIN_PATH)system $(BIN_PATH)head.o $(BIN_PATH)main.o -T Kernel.lds 
