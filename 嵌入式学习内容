@@ -1,0 +1,6 @@
+
+1、熟悉uboot移植 linux底层内核裁剪、驱动移植开发,负责Linux系统内核、Uboot引导程序、底层BSP驱动软件的开发工作；
+3、熟悉ARM架构，掌握基于ARM的Cortex-A7、Cortex-A9结构开发，了解硬件基本原理，熟悉飞思卡尔IMX6平台尤佳；
+4、熟悉Linux 设备驱动开发 USB接口，网口、can总线、IO、 UART、IIC、SPI、LCD、音频等驱动。
+6、熟悉Linux内核框架，Linux驱动模型，用户空间驱动设计；
+
