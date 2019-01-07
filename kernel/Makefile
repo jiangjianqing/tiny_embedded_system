@@ -34,7 +34,7 @@ main.o:	main.c
 	gcc  -mcmodel=large -fno-builtin -m64 -c main.c -o $(BIN_PATH)main.o
 
 head.o:	head.S
-	gcc -E  head.S > $(BIN_PATH)head.s
+	gcc -E -C head.S > $(BIN_PATH)head.s
 	as --64 -o $(BIN_PATH)head.o $(BIN_PATH)head.s
 
 mount_and_copy: build
